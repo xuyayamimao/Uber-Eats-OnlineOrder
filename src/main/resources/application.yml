@@ -1,0 +1,24 @@
+spring:
+  datasource:
+#    location of your data source: url
+    url: jdbc:postgresql://${DATABASE_URL:localhost}:5432/onlineorder
+#    username and password
+#    DATABASE_USERNAME 是aws在运行的时候会pickup，在本地运行的时候username是postgres；same for password
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:secret}
+    driver-class-name: org.postgresql.Driver
+  jackson:
+    default-property-inclusion: non_null
+    property-naming-strategy: SNAKE_CASE
+#  告诉spring每次都要把database-init给pickup才可以run这个东西
+  sql:
+    init:
+      mode: ${INIT_DB:always}
+      schema-locations: "classpath:database-init.sql"
+
+
+logging:
+  level:
+    org.apache.coyote.http11.Http11InputBuffer: DEBUG # Incoming HTTP requests
+    org.springframework.jdbc.core: DEBUG # SQL
+
