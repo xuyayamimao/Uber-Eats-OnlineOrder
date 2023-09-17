@@ -26,7 +26,7 @@ public class CartController {
 
 
     @GetMapping("/cart")
-    public CartDto getCart(@AuthenticationPrincipal User user) {
+    public CartDto getCart(@AuthenticationPrincipal User user) {//这个parameter是把user的参数传进来
         CustomerEntity customer = customerService.getCustomerByEmail(user.getUsername());
         return cartService.getCart(customer.id());
     }

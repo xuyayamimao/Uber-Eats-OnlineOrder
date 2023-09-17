@@ -8,6 +8,8 @@ import com.laioffer.onlineorder.model.OrderItemDto;
 import com.laioffer.onlineorder.repository.CartRepository;
 import com.laioffer.onlineorder.repository.MenuItemRepository;
 import com.laioffer.onlineorder.repository.OrderItemRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +56,7 @@ public class CartService {
 //
 //    }
 
+    @CacheEvict(cacheNames = "cart", key = "#customerId")//当用户加了新的东西到cart里面之后，我们就要清掉目前的缓存，因为data变化了
     @Transactional
     public void addMenuItemToCart(long customerId, long menuItemId) {
         CartEntity cart = cartRepository.getByCustomerId(customerId);
@@ -77,6 +80,9 @@ public class CartService {
 
 
 
+
+    //你在哪个function上面加cache，spring就缓存那个function返回的东西
+    @Cacheable("cart")//cacheable会根据你的function parameter来存数据 e.g.根据customer来存不同的cart数据
     public CartDto getCart(Long customerId){
         CartEntity cart = cartRepository.getByCustomerId(customerId);
         List<OrderItemEntity> orderItems = orderItemRepository.getAllByCartId(cart.id());
@@ -85,6 +91,7 @@ public class CartService {
     }
 
     //transactional确保的是如果其中一个步骤出错的话，那么整一个更改都会roll back
+    @CacheEvict(cacheNames = "cart")//清除缓存，因为这个时候cart data也变化了
     @Transactional
     public void clearCart(Long custormerId){
         //get出来customerId对应的cartEntity

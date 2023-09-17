@@ -6,6 +6,7 @@ import com.laioffer.onlineorder.model.MenuItemDto;
 import com.laioffer.onlineorder.model.RestaurantDto;
 import com.laioffer.onlineorder.repository.MenuItemRepository;
 import com.laioffer.onlineorder.repository.RestaurantRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class RestaurantService {
      * Get all restaurant as DTO
      * @return a list of RestaurantDto
      */
+    @Cacheable("restaurants")
     public List<RestaurantDto> getRestaurants() {
         //get出所有的restarurant entities以及所有的menu entities
         List<RestaurantEntity> restaurantEntities = restaurantRepository.findAll();

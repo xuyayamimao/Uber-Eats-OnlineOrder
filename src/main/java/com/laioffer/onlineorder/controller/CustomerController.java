@@ -23,5 +23,6 @@ public class CustomerController {
     public void signUp(@RequestBody RegisterBody body) {
         customerService.signUp(body.email(), body.password(), body.firstName(), body.lastName());
     }
+    //之所以这里没有login和logout是因为spring已经提供这些操作了
 
 }
